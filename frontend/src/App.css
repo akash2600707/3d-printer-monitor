@@ -1,0 +1,59 @@
+/* App.css — Industrial Dark Theme */
+:root {
+  --bg-primary: #0a0c0f;
+  --bg-secondary: #111318;
+  --bg-card: #161a20;
+  --bg-card-hover: #1c2028;
+  --accent-orange: #ff6b1a;
+  --accent-orange-dim: #ff6b1a33;
+  --accent-blue: #00b4d8;
+  --accent-blue-dim: #00b4d820;
+  --accent-green: #00e676;
+  --accent-red: #ff1744;
+  --accent-yellow: #ffd600;
+  --text-primary: #e8eaf0;
+  --text-secondary: #8892a4;
+  --text-mono: #c8d0e0;
+  --border: #252b35;
+  --border-bright: #3a4455;
+  --font-display: "Exo 2", sans-serif;
+  --font-mono: "Share Tech Mono", monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(ellipse at 10% 20%, #ff6b1a08 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 80%, #00b4d808 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.App {
+  position: relative;
+  z-index: 1;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }

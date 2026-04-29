@@ -1,0 +1,79 @@
+/* StatusCard.css */
+.status-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.2s;
+  border-left: 3px solid var(--accent, var(--accent-orange));
+}
+
+.status-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent, var(--accent-orange));
+}
+
+.status-card.danger {
+  border-color: var(--accent-red);
+  animation: danger-flash 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes danger-flash {
+  from { border-left-color: var(--accent-red); }
+  to { border-left-color: transparent; }
+}
+
+.card-icon {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.card-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.card-value {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.value-number {
+  font-family: var(--font-mono);
+  font-size: 32px;
+  font-weight: 400;
+  color: var(--accent, var(--text-primary));
+  line-height: 1;
+}
+
+.value-unit {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.card-target {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  letter-spacing: 1px;
+}
+
+.card-glow {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(ellipse at top right, var(--accent, transparent), transparent 70%);
+  opacity: 0.15;
+  pointer-events: none;
+}

@@ -1,0 +1,92 @@
+/* Controls.css */
+.controls { display: flex; flex-direction: column; gap: 16px; }
+
+.ctrl-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+
+.file-select {
+  width: 100%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-bright);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.file-select:hover:not(:disabled) { border-color: var(--accent-orange); }
+.file-select:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.ctrl-buttons { display: flex; flex-direction: column; gap: 8px; }
+
+.ctrl-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.ctrl-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none !important; }
+.ctrl-btn:not(:disabled):hover { transform: translateY(-1px); }
+
+.btn-icon { font-size: 16px; }
+
+.ctrl-btn.start {
+  background: var(--accent-orange-dim);
+  border-color: var(--accent-orange);
+  color: var(--accent-orange);
+}
+.ctrl-btn.start:not(:disabled):hover {
+  background: var(--accent-orange);
+  color: #000;
+}
+
+.ctrl-btn.pause {
+  background: #ffd60015;
+  border-color: var(--accent-yellow);
+  color: var(--accent-yellow);
+}
+
+.ctrl-btn.resume {
+  background: #00e67615;
+  border-color: var(--accent-green);
+  color: var(--accent-green);
+}
+
+.ctrl-btn.cancel {
+  background: #ff174415;
+  border-color: var(--accent-red);
+  color: var(--accent-red);
+}
+
+.status-msg {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border-left: 3px solid;
+}
+
+.status-msg.heating { color: var(--accent-yellow); border-color: var(--accent-yellow); background: #ffd60010; }
+.status-msg.cooling { color: var(--accent-blue); border-color: var(--accent-blue); background: #00b4d810; }
+.status-msg.paused { color: var(--accent-yellow); border-color: var(--accent-yellow); background: #ffd60010; }
+.status-msg.idle { color: var(--accent-green); border-color: var(--accent-green); background: #00e67610; }
