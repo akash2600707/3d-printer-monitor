@@ -1,6 +1,6 @@
 // src/components/PrintHistory.js
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { fetchJobs, fetchStats, deleteJob } from "../historyService";
 import "./PrintHistory.css";
 
 function formatDuration(seconds) {
@@ -14,46 +14,52 @@ export default function PrintHistory() {
   const [jobs, setJobs] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [noSupabase, setNoSupabase] = useState(false);
 
-  const fetchData = async () => {
+  const loadData = async () => {
+    setLoading(true);
     try {
-      const [jobsRes, statsRes] = await Promise.all([
-        axios.get("/api/history"),
-        axios.get("/api/history/stats"),
-      ]);
-      setJobs(jobsRes.data.data || []);
-      setStats(statsRes.data.data || null);
+      const [jobsData, statsData] = await Promise.all([fetchJobs(), fetchStats()]);
+      if (jobsData === null && statsData === null) {
+        setNoSupabase(true);
+      } else {
+        setJobs(jobsData || []);
+        setStats(statsData);
+      }
     } catch (err) {
-      console.error("Failed to fetch history:", err);
+      console.error("Failed to load history:", err);
+      setNoSupabase(true);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  useEffect(() => { loadData(); }, []);
 
   const handleDelete = async (id) => {
-    try {
-      await axios.delete(`/api/history/${id}`);
-      setJobs((prev) => prev.filter((j) => j._id !== id));
-    } catch (err) {
-      console.error("Failed to delete:", err);
-    }
+    await deleteJob(id);
+    setJobs((prev) => prev.filter((j) => j.id !== id));
   };
 
   if (loading) {
+    return <div className="history-loading">Loading print history...</div>;
+  }
+
+  if (noSupabase) {
     return (
-      <div className="history-loading">
-        Loading print history...
+      <div className="print-history">
+        <div className="no-history">
+          <p>⚠️ Supabase not configured.</p>
+          <p style={{ marginTop: 8, fontSize: 11 }}>
+            Add REACT_APP_SUPABASE_URL and REACT_APP_SUPABASE_ANON_KEY to your .env file.
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="print-history">
-      {/* Stats Summary */}
       {stats && (
         <div className="history-stats">
           <div className="hist-stat">
@@ -75,7 +81,6 @@ export default function PrintHistory() {
         </div>
       )}
 
-      {/* Job List */}
       {jobs.length === 0 ? (
         <div className="no-history">
           <p>No print history yet. Start your first print!</p>
@@ -92,25 +97,19 @@ export default function PrintHistory() {
             <span></span>
           </div>
           {jobs.map((job) => (
-            <div key={job._id} className="history-row">
-              <span className="job-filename">📄 {job.fileName}</span>
+            <div key={job.id} className="history-row">
+              <span className="job-filename">📄 {job.file_name}</span>
               <span className={`job-status status-${job.status}`}>
                 {job.status === "completed" ? "✅" : job.status === "cancelled" ? "❌" : "⚠️"}
                 {" "}{job.status.toUpperCase()}
               </span>
               <span className="job-date">
-                {new Date(job.endTime).toLocaleDateString()}
+                {new Date(job.end_time).toLocaleDateString()}
               </span>
               <span className="job-duration">{formatDuration(job.duration)}</span>
-              <span className="job-filament">{job.filamentUsed?.toFixed(1)}g</span>
-              <span className="job-layers">
-                {job.layersCompleted}/{job.totalLayers}
-              </span>
-              <button
-                className="delete-btn"
-                onClick={() => handleDelete(job._id)}
-                title="Delete"
-              >✕</button>
+              <span className="job-filament">{Number(job.filament_used)?.toFixed(1)}g</span>
+              <span className="job-layers">{job.layers_completed}/{job.total_layers}</span>
+              <button className="delete-btn" onClick={() => handleDelete(job.id)} title="Delete">✕</button>
             </div>
           ))}
         </div>
